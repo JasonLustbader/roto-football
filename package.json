@@ -1,0 +1,11 @@
+{
+  "name": "roto-football",
+  "version": "0.0.0",
+  "description": "A live fantasy football app with the rotisserie scoring system.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jason Lustbader & Ryan Kinderman",
+  "license": "ISC"
+}
