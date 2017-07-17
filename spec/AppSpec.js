@@ -1,6 +1,9 @@
 App = require("../lib/App.js");
 
 describe("App", function() {
+  function createTeam() {
+  }
+
   it("scores passing yards for two teams for a week", function() {
     // Team A - 300 passing yards
     // Team B - 500 passing yards
