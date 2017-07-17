@@ -1,7 +1,37 @@
 App = require("../lib/App.js");
 
 describe("App", function() {
+  var Team = function() {
+  }
+
   function createTeam() {
+    var team = new Team();
+    team.id = 1;
+    return team;
+  }
+
+  function createPlayer(team) {
+  }
+
+  var RushingYardsCategory = function() {
+  }
+
+  function createRushingYardsCategory() {
+    var cat = new RushingYardsCategory();
+    cat.id = 1;
+    return cat;
+  }
+
+  var Week = function() {
+  }
+
+  Week.prototype.addStat = function(category, team, value) {
+  }
+
+  function createWeek() {
+    var week = new Week();
+    week.id = 1;
+    return week;
   }
 
   it("scores passing yards for two teams for a week", function() {
@@ -49,8 +79,8 @@ describe("App", function() {
 
     var categoryScoreForWeek = new App().getScoreForWeek(week.id, category.id);
 
-    equals(categoryScoreForWeek[teamA.id], 1);
-    equals(categoryScoreForWeek[teamB.id], 2);
+    expect(categoryScoreForWeek[teamA.id]).toEqual(1);
+    expect(categoryScoreForWeek[teamB.id]).toEqual(2);
   });
 });
 
