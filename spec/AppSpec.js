@@ -4,9 +4,10 @@ describe("App", function() {
   var Team = function() {
   }
 
+  var nextTeamId = 1;
   function createTeam() {
     var team = new Team();
-    team.id = 1;
+    team.id = nextTeamId++;
     return team;
   }
 
@@ -82,5 +83,10 @@ describe("App", function() {
     expect(categoryScoreForWeek[teamA.id]).toEqual(1);
     expect(categoryScoreForWeek[teamB.id]).toEqual(2);
   });
+
+  // team 1 has 300 passing yards
+  // team 2 has 300 passing yards
+  // expect(team1.score).to eq team2.score
+  it("assigns category scores when two teams tie in a category");
 });
 
