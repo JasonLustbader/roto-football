@@ -1,4 +1,5 @@
-App = require("../lib/App.js");
+var App = require("../lib/App.js");
+var db = require("../lib/Db.js");
 
 describe("App", function() {
   var Team = function() {
@@ -12,6 +13,9 @@ describe("App", function() {
   }
 
   function createPlayer(team) {
+    return {
+      id: 1
+    };
   }
 
   var RushingYardsCategory = function() {
@@ -26,7 +30,8 @@ describe("App", function() {
   var Week = function() {
   }
 
-  Week.prototype.addStat = function(category, team, value) {
+  Week.prototype.addStat = function(team, category, value) {
+    db.createWeekTeamCategoryStat(this.id, team.id, category.id, value);
   }
 
   function createWeek() {
@@ -75,8 +80,8 @@ describe("App", function() {
     var teamBPlayer = createPlayer(teamB);
     var category = createRushingYardsCategory();
     var week = createWeek();
-    week.addStat(category, teamAPlayer, 300);
-    week.addStat(category, teamBPlayer, 500);
+    week.addStat(teamAPlayer, category, 300);
+    week.addStat(teamBPlayer, category, 500);
 
     var categoryScoreForWeek = new App().getScoreForWeek(week.id, category.id);
 
