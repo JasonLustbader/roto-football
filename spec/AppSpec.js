@@ -32,7 +32,12 @@ describe("App", function() {
   }
 
   Week.prototype.addStat = function(player, category, value) {
-    db.createWeekTeamCategoryStat(this.id, player.id, player.teamId, category.id, value);
+    db.createWeekTeamCategoryStat({
+      weekId: this.id,
+      teamId: player.teamId,
+      categoryId: category.id,
+      value: value
+      });
   }
 
   function createWeek() {
