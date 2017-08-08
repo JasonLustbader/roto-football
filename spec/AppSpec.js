@@ -46,6 +46,10 @@ describe("App", function() {
     return week;
   }
 
+  beforeEach(function() {
+    db.clear();
+  });
+
   it("scores passing yards for two teams for a week", function() {
     var teamA = createTeam();
     var teamB = createTeam();
@@ -62,9 +66,20 @@ describe("App", function() {
     expect(categoryScoreForWeek[teamB.id]).toEqual(2);
   });
 
-  // team 1 has 300 passing yards
-  // team 2 has 300 passing yards
-  // expect(team1.score).to eq team2.score
-  it("assigns category scores when two teams tie in a category");
+  it("assigns category scores when two teams tie in a category", function() {
+    var teamA = createTeam();
+    var teamB = createTeam();
+    var teamAPlayer = createPlayer(teamA);
+    var teamBPlayer = createPlayer(teamB);
+    var category = createRushingYardsCategory();
+    var week = createWeek();
+    week.addStat(teamAPlayer, category, 300);
+    week.addStat(teamBPlayer, category, 300);
+
+    var categoryScoreForWeek = new App().getScoreForWeek(week.id, category.id);
+
+    expect(categoryScoreForWeek[teamA.id]).toEqual(1.5);
+    expect(categoryScoreForWeek[teamB.id]).toEqual(1.5);
+  });
 });
 
