@@ -1,5 +1,7 @@
 ## Next time
 
+* Persist stat row directly, vs creating separate tuple
+
 ## Feature List
 
 ### Calculate score across multiple categories
@@ -25,5 +27,6 @@ An "inactive" player's scores (from the actual game) do not impact the team's sc
 -drafting
 -trading
 -free agency
+-live update
 
 ### Support a "flex" position
