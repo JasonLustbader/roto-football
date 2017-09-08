@@ -46,7 +46,27 @@ describe("App", function() {
     return cat;
   }
 
-  var Week = function() {
+  var Season = function() { }
+
+  function createSeason() {
+    var season = new Season();
+    season.id = 1;
+
+//    db.createSeason(
+//      {
+//        id: season.id
+//      }
+//    );
+
+    return season;
+  }
+
+  var Week = function(attributes) {
+    var instance = this;
+
+    Object.keys(attributes).forEach(function(attribute) {
+      instance[attribute] = attributes[attribute];
+    });
   }
 
   Week.prototype.addStat = function(player, category, value) {
@@ -55,13 +75,23 @@ describe("App", function() {
       teamId: player.teamId,
       categoryId: category.id,
       value: value
-      });
+    });
   }
 
-  function createWeek() {
-    var week = new Week();
-    week.id = 1;
-    week.seasonId = 1;
+  var nextWeekId = 1;
+  function createWeek(attributes = {}) {
+    attributes = Object.assign(
+      {
+        id: nextWeekId++
+      },
+      attributes
+    );
+
+    if (typeof(attributes.seasonId) === "undefined" || attributes.seasonId === null) {
+      attributes.seasonId = createSeason().id;
+    }
+
+    var week = new Week(attributes);
 
     db.createWeek(
       {
@@ -77,7 +107,7 @@ describe("App", function() {
     db.clear();
   });
 
-  it("scores rushing yards for two teams after a week", function() {
+  it("scores a category for two teams for a one-week season", function() {
     var teamA = createTeam();
     var teamB = createTeam();
     var teamAPlayer = createPlayer(teamA);
@@ -93,7 +123,7 @@ describe("App", function() {
     expect(scores[teamB.id]).toEqual(2);
   });
 
-  it("scores rushing yards and receiving yards for two teams for a week", function() {
+  it("scores multiple categories for two teams for a one-week season", function() {
     var teamA = createTeam();
     var teamB = createTeam();
     var teamAPlayer = createPlayer(teamA);
@@ -110,6 +140,26 @@ describe("App", function() {
 
     expect(scores[teamA.id]).toEqual(2);
     expect(scores[teamB.id]).toEqual(4);
+  });
+
+  it("scores a category for two teams for a two-week season", function() {
+    var teamA = createTeam();
+    var teamB = createTeam();
+    var teamAPlayer = createPlayer(teamA);
+    var teamBPlayer = createPlayer(teamB);
+    var category = createRushingYardsCategory();
+    var season = createSeason();
+    var week1 = createWeek({ seasonId: season.id });
+    week1.addStat(teamAPlayer, category, 300);
+    week1.addStat(teamBPlayer, category, 500);
+    var week2 = createWeek({ seasonId: season.id });
+    week2.addStat(teamAPlayer, category, 500);
+    week2.addStat(teamBPlayer, category, 200);
+
+    var scores = new App().getScoresForSeason(season.id);
+
+    expect(scores[teamA.id]).toEqual(2);
+    expect(scores[teamB.id]).toEqual(1);
   });
 
   it("assigns category scores when two teams tie in a category", function() {
