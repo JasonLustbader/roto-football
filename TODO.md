@@ -1,10 +1,7 @@
 ## Next time
 
-* Persist stat row directly, vs creating separate tuple
 
 ## Feature List
-
-### Calculate score across multiple categories
 
 ### Teams can have more players than there are positions to fill
 
