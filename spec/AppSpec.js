@@ -134,11 +134,25 @@ describe("App", function() {
     var teamAPlayer2 = createPlayer(teamA);
     var teamBPlayer2 = createPlayer(teamB);
     var category = createRushingYardsCategory();
-    var week = createWeek();
+    var season1 = createSeason();
+    var week = createWeek({ seasonId: season1.id });
     week.addStat(teamAPlayer1, category, 100);
     week.addStat(teamBPlayer1, category, 150);
     week.addStat(teamAPlayer2, category, 150);
     week.addStat(teamBPlayer2, category, 50);
+
+    var scores = new App().getCategoryScoresForSeason(week.seasonId, category.id);
+
+    expect(scores[teamA.id]).toEqual(2);
+    expect(scores[teamB.id]).toEqual(1);
+
+    // verify that it's not just picking a single player by swapping scores
+    var season2 = createSeason();
+    week = createWeek({ seasonId: season2.id });
+    week.addStat(teamAPlayer1, category, 150);
+    week.addStat(teamBPlayer1, category, 50);
+    week.addStat(teamAPlayer2, category, 100);
+    week.addStat(teamBPlayer2, category, 150);
 
     var scores = new App().getCategoryScoresForSeason(week.seasonId, category.id);
 
