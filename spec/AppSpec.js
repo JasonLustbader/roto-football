@@ -12,9 +12,10 @@ describe("App", function() {
     return team;
   }
 
+  var nextPlayerId = 1;
   function createPlayer(team) {
     return {
-      id: 1,
+      id: nextPlayerId++,
       teamId: team.id
     };
   }
@@ -65,6 +66,7 @@ describe("App", function() {
   }
 
   var Week = function(attributes) {
+    this._activePlayers = [];
     var instance = this;
 
     Object.keys(attributes).forEach(function(attribute) {
@@ -73,12 +75,18 @@ describe("App", function() {
   }
 
   Week.prototype.addStat = function(player, category, value) {
-    db.createWeekTeamCategoryStat({
+    db.createWeekStat({
       weekId: this.id,
-      teamId: player.teamId,
+      seasonId: this.seasonId,
       categoryId: category.id,
+      teamId: player.teamId,
+      playerId: player.id,
       value: value
     });
+  }
+
+  Week.prototype.activatePlayer = function(player) {
+    this._activePlayers.push(player);
   }
 
   var nextWeekId = 1;
@@ -240,7 +248,6 @@ describe("App", function() {
     expect(scores[teamB.id]).toEqual(2);
   });
 
-  /*
   it("only takes the category stats of active players into account when scoring for a one week, one category season", function() {
     var teamA = createTeam();
     var teamB = createTeam();
@@ -250,14 +257,19 @@ describe("App", function() {
     var teamBPlayerInactive = createPlayer(teamB);
     var category = createRushingYardsCategory();
     var week = createWeek();
-    week.addStat(teamAPlayer, category, 300);
-    week.addStat(teamBPlayer, category, 500);
+    week.addStat(teamAPlayerActive, category, 300);
+    week.addStat(teamBPlayerActive, category, 500);
+    week.addStat(teamAPlayerInactive, category, 500);
+    week.addStat(teamBPlayerInactive, category, 300);
+    week.activatePlayer(teamAPlayerActive);
+    week.activatePlayer(teamBPlayerActive);
 
     var scores = new App().getCategoryScoresForSeason(week.seasonId, category.id);
 
     expect(scores[teamA.id]).toEqual(1);
     expect(scores[teamB.id]).toEqual(2);
   });
-  */
+
+  it("gives teams without a sufficient number of active players 0 points");
 });
 
