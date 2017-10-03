@@ -1,9 +1,17 @@
 ## Next time
 
+Association should be PlayerTeam
+-playerId
+-teamId
+-weekId
+-active?
+
+we currently assign a player to a team directly, and persist only for stats, but:
+- a player can switch teams from week to week
+- a player can be active/inactive relative to its team and a given week
+- as a result of the above, we can't associate a player only with a team for the purposes of determining which players are on a team; we must also consider the week
 
 ## Feature List
-
-### Support multiple players on a team
 
 ### Teams can have more players than there are positions to fill
 
@@ -19,9 +27,11 @@ High-level:
 #### Implementation notes
 
 Feature: The stats of inactive players do not affect the team scores in the roto-football game
+Cleanup: DRY up id incrementing for factory functions
 Feature: The inactive players can change week-to-week
 Feature: A team with unfilled positions for a week will get a score of 0 for all categories for that week
 Feature: A week cannot be created with a team exceeding the maximum players for a position
+Feature: An active player can be deactivated for a week when managing active players before a week is played
 
 ### Handle categories where the value is better the lower it is
 

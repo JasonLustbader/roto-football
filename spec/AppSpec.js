@@ -12,9 +12,10 @@ describe("App", function() {
     return team;
   }
 
+  var nextPlayerId = 1;
   function createPlayer(team) {
     return {
-      id: 1,
+      id: nextPlayerId++,
       teamId: team.id
     };
   }
@@ -59,9 +60,44 @@ describe("App", function() {
 //    );
 
     return season;
+  }
 
-    it("only takes the category stats of active players into account when scoring for a one week, one category season", function() {
+  var TeamWeek = function(attributes) {
+    // TODO: this class needs to support record ids for the below objects when they're coming from the database
+    this.week = attributes.week;
+    this.team = attributes.team;
+    this._players = [];
+  }
+
+  TeamWeek.prototype.addPlayers = function(players) {
+    players.forEach(function(player) {
+      this._players.push({ player: player, active: false });
+    }
+  }
+
+  TeamWeek.prototype.activatePlayers = function(players) {
+    players.forEach(function(player) {
+      var playerToActivate = _.find(
+        this._players,
+        function(teamPlayer) { teamPlayer.player.id === player.id }
+      );
+
+      if (playerToActivate === undefined) {
+        throw "No player found to activate";
+      } else {
+        playerToActivate.active = true;
+      }
+
+    };
+  }
+
+  function createTeamWeek(attributes = {}) {
+    var teamWeek = new TeamWeek(attributes);
+    var dbRecord = db.createTeamWeek({
+      weekId: teamWeek.week.id,
+      teamId: teamWeek.team.id
     });
+    teamWeek.id = dbRecord.id;
   }
 
   var Week = function(attributes) {
@@ -73,12 +109,18 @@ describe("App", function() {
   }
 
   Week.prototype.addStat = function(player, category, value) {
-    db.createWeekTeamCategoryStat({
+    db.createWeekStat({
       weekId: this.id,
-      teamId: player.teamId,
+      seasonId: this.seasonId,
       categoryId: category.id,
+      teamId: player.teamId,
+      playerId: player.id,
       value: value
     });
+  }
+
+  Week.prototype.activatePlayer = function(player) {
+    this._activePlayers.push(player);
   }
 
   var nextWeekId = 1;
@@ -240,24 +282,33 @@ describe("App", function() {
     expect(scores[teamB.id]).toEqual(2);
   });
 
-  /*
   it("only takes the category stats of active players into account when scoring for a one week, one category season", function() {
     var teamA = createTeam();
     var teamB = createTeam();
-    var teamAPlayerActive = createPlayer(teamA);
-    var teamBPlayerActive = createPlayer(teamB);
-    var teamAPlayerInactive = createPlayer(teamA);
-    var teamBPlayerInactive = createPlayer(teamB);
+    var teamAPlayerActive = createPlayer();
+    var teamBPlayerActive = createPlayer();
+    var teamAPlayerInactive = createPlayer();
+    var teamBPlayerInactive = createPlayer();
     var category = createRushingYardsCategory();
     var week = createWeek();
-    week.addStat(teamAPlayer, category, 300);
-    week.addStat(teamBPlayer, category, 500);
+    week.addStat(teamAPlayerActive, category, 300);
+    week.addStat(teamBPlayerActive, category, 500);
+    week.addStat(teamAPlayerInactive, category, 500);
+    week.addStat(teamBPlayerInactive, category, 300);
+    var teamAWeek = createTeamWeek({week: week, team: teamA});
+    var teamBWeek = createTeamWeek({week: week, team: teamB});
+    teamAWeek.addPlayers([teamAPlayerActive, teamAPlayerInactive]);
+    teamBWeek.addPlayers([teamBPlayerActive, teamBPlayerInactive]);
 
-    var scores = new App().getCategoryScoresForSeason(week.seasonId, category.id);
+    teamAWeek.activatePlayers([teamAPlayerActive]);
+    teamBWeek.activatePlayers([teamBPlayerActive]);
+
+    var scores = new App().getScoresForSeason1(week.seasonId);
 
     expect(scores[teamA.id]).toEqual(1);
     expect(scores[teamB.id]).toEqual(2);
   });
-  */
+
+  it("gives teams without a sufficient number of active players 0 points");
 });
 
