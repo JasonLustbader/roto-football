@@ -264,7 +264,7 @@ describe("App", function() {
     week.activatePlayer(teamAPlayerActive);
     week.activatePlayer(teamBPlayerActive);
 
-    var scores = new App().getCategoryScoresForSeason(week.seasonId, category.id);
+    var scores = new App().getScoresForSeason1(week.seasonId);
 
     expect(scores[teamA.id]).toEqual(1);
     expect(scores[teamB.id]).toEqual(2);
