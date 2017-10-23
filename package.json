@@ -7,6 +7,9 @@
     "test": "jasmine"
   },
   "dependencies": {
+    "underscore": "^1.8"
+  },
+  "devDependencies": {
     "jasmine": "^2.6"
   },
   "author": "Jason Lustbader & Ryan Kinderman",
