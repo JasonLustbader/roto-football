@@ -1,5 +1,16 @@
 ## Next time
 
+Association should be PlayerTeam
+-playerId
+-teamId
+-weekId
+-active?
+
+- we currently assign a player to a team directly, and persist only for stats
+- a player can switch teams from week to week
+- a player can be active/inactive relative to its team and a given week
+- as a result of the above, we can't associate a player only with a team for the purposes of determining which players are on a team; we must also consider the week
+
 ## Feature List
 
 ### Teams can have more players than there are positions to fill

@@ -111,6 +111,13 @@ describe("App", function() {
       }
     );
 
+    this._activePlayers.forEach(function(player) {
+      db.createTeamPlayer({
+        weekId: week.id,
+        //teamId:
+      });
+    });
+
     return week;
   }
 
