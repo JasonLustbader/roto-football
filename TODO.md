@@ -1,5 +1,10 @@
 ## Next time
 
+2017-11-15
+
+* Retrieve active players from database for getScoresForSeason1
+
+< 2017-11-15
 Association should be PlayerTeam
 -playerId
 -teamId
@@ -10,6 +15,8 @@ we currently assign a player to a team directly, and persist only for stats, but
 - a player can switch teams from week to week
 - a player can be active/inactive relative to its team and a given week
 - as a result of the above, we can't associate a player only with a team for the purposes of determining which players are on a team; we must also consider the week
+
+
 
 ## Feature List
 
@@ -26,6 +33,7 @@ High-level:
 
 #### Implementation notes
 
+Cleanup: Upgrade nodejs (we're using 6.x, 8.x is out)
 Feature: The stats of inactive players do not affect the team scores in the roto-football game
 Cleanup: DRY up id incrementing for factory functions
 Feature: The inactive players can change week-to-week
