@@ -1,3 +1,4 @@
+var _ = require("underscore");
 var App = require("../lib/App.js");
 var db = require("../lib/Db.js");
 
@@ -13,10 +14,9 @@ describe("App", function() {
   }
 
   var nextPlayerId = 1;
-  function createPlayer(team) {
+  function createPlayer() {
     return {
-      id: nextPlayerId++,
-      teamId: team.id
+      id: nextPlayerId++
     };
   }
 
@@ -70,34 +70,39 @@ describe("App", function() {
   }
 
   TeamWeek.prototype.addPlayers = function(players) {
+    var that = this;
     players.forEach(function(player) {
-      this._players.push({ player: player, active: false });
-    }
+      that._players.push({ player: player, active: false });
+    });
   }
 
   TeamWeek.prototype.activatePlayers = function(players) {
+    var that = this;
     players.forEach(function(player) {
       var playerToActivate = _.find(
-        this._players,
-        function(teamPlayer) { teamPlayer.player.id === player.id }
+        that._players,
+        function(teamPlayer) { return teamPlayer.player.id === player.id }
       );
 
       if (playerToActivate === undefined) {
-        throw "No player found to activate";
+        throw new Error("No player found to activate");
       } else {
         playerToActivate.active = true;
       }
 
-    };
+    });
   }
 
   function createTeamWeek(attributes = {}) {
     var teamWeek = new TeamWeek(attributes);
+
     var dbRecord = db.createTeamWeek({
       weekId: teamWeek.week.id,
       teamId: teamWeek.team.id
     });
     teamWeek.id = dbRecord.id;
+
+    return teamWeek;
   }
 
   var Week = function(attributes) {
