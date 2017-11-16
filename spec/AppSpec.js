@@ -61,48 +61,25 @@ describe("App", function() {
 
     return season;
   }
-
-  var TeamWeek = function(attributes) {
+  var PlayerState = function(attributes) {
     // TODO: this class needs to support record ids for the below objects when they're coming from the database
     this.week = attributes.week;
     this.team = attributes.team;
-    this._players = [];
+    this.player = attributes.player;
+    this.active = attributes.active;
   }
 
-  TeamWeek.prototype.addPlayers = function(players) {
-    var that = this;
-    players.forEach(function(player) {
-      that._players.push({ player: player, active: false });
+  function createPlayerState(attributes = {}) {
+    var playerState = new PlayerState(attributes);
+
+    db.createPlayerState({
+      teamId: playerState.team.id,
+      weekId: playerState.week.id,
+      playerId: playerState.player.id,
+      active: playerState.active
     });
-  }
 
-  TeamWeek.prototype.activatePlayers = function(players) {
-    var that = this;
-    players.forEach(function(player) {
-      var playerToActivate = _.find(
-        that._players,
-        function(teamPlayer) { return teamPlayer.player.id === player.id }
-      );
-
-      if (playerToActivate === undefined) {
-        throw new Error("No player found to activate");
-      } else {
-        playerToActivate.active = true;
-      }
-
-    });
-  }
-
-  function createTeamWeek(attributes = {}) {
-    var teamWeek = new TeamWeek(attributes);
-
-    var dbRecord = db.createTeamWeek({
-      weekId: teamWeek.week.id,
-      teamId: teamWeek.team.id
-    });
-    teamWeek.id = dbRecord.id;
-
-    return teamWeek;
+    return playerState;
   }
 
   var Week = function(attributes) {
@@ -118,7 +95,6 @@ describe("App", function() {
       weekId: this.id,
       seasonId: this.seasonId,
       categoryId: category.id,
-      teamId: player.teamId,
       playerId: player.id,
       value: value
     });
@@ -265,8 +241,8 @@ describe("App", function() {
   it("scores multiple categories for two teams for a two-week season", function() {
     var teamA = createTeam();
     var teamB = createTeam();
-    var teamAPlayer = createPlayer(teamA);
-    var teamBPlayer = createPlayer(teamB);
+    var teamAPlayer = createPlayer();
+    var teamBPlayer = createPlayer();
     var category1 = createRushingYardsCategory();
     var category2 = createReceivingYardsCategory();
     var season = createSeason();
@@ -281,7 +257,32 @@ describe("App", function() {
     week2.addStat(teamAPlayer, category2, 500);
     week2.addStat(teamBPlayer, category2, 200);
 
-    var scores = new App().getScoresForSeason(season.id);
+    createPlayerState({
+      week: week1,
+      team: teamA,
+      player: teamAPlayer,
+      active: true
+    });
+    createPlayerState({
+      week: week1,
+      team: teamB,
+      player: teamBPlayer,
+      active: true
+    });
+    createPlayerState({
+      week: week2,
+      team: teamA,
+      player: teamAPlayer,
+      active: true
+    });
+    createPlayerState({
+      week: week2,
+      team: teamB,
+      player: teamBPlayer,
+      active: true
+    });
+
+    var scores = new App().getScoresForSeason1(season.id);
 
     expect(scores[teamA.id]).toEqual(4);
     expect(scores[teamB.id]).toEqual(2);
@@ -300,19 +301,40 @@ describe("App", function() {
     week.addStat(teamBPlayerActive, category, 500);
     week.addStat(teamAPlayerInactive, category, 500);
     week.addStat(teamBPlayerInactive, category, 300);
-    var teamAWeek = createTeamWeek({week: week, team: teamA});
-    var teamBWeek = createTeamWeek({week: week, team: teamB});
-    teamAWeek.addPlayers([teamAPlayerActive, teamAPlayerInactive]);
-    teamBWeek.addPlayers([teamBPlayerActive, teamBPlayerInactive]);
 
-    teamAWeek.activatePlayers([teamAPlayerActive]);
-    teamBWeek.activatePlayers([teamBPlayerActive]);
+    createPlayerState({
+      week: week,
+      team: teamA,
+      player: teamAPlayerActive,
+      active: true
+    });
+    createPlayerState({
+      week: week,
+      team: teamA,
+      player: teamAPlayerInactive,
+      active: false
+    });
+    createPlayerState({
+      week: week,
+      team: teamB,
+      player: teamBPlayerActive,
+      active: true
+    });
+    createPlayerState({
+      week: week,
+      team: teamB,
+      player: teamBPlayerInactive,
+      active: false
+    });
 
     var scores = new App().getScoresForSeason1(week.seasonId);
 
     expect(scores[teamA.id]).toEqual(1);
     expect(scores[teamB.id]).toEqual(2);
   });
+
+  // This could happen if a team hasn't played yet for a given week
+  it("defaults the sum of stats for a team in a given category to 0 if a team has not accrued any stats in that category");
 
   it("gives teams without a sufficient number of active players 0 points");
 });
