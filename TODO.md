@@ -1,5 +1,10 @@
 ## Next time
 
+2017-11-27
+
+activeStats is returning the stats, but with no teamIds 
+(in getScoresForSeason1)
+
 2017-11-15
 
 * Retrieve active players from database for getScoresForSeason1
@@ -33,6 +38,7 @@ High-level:
 
 #### Implementation notes
 
+Cleanup: Define categories in Db and figure out why tests for categories aren't failing
 Cleanup: Upgrade nodejs (we're using 6.x, 8.x is out)
 Feature: The stats of inactive players do not affect the team scores in the roto-football game
 Cleanup: DRY up id incrementing for factory functions

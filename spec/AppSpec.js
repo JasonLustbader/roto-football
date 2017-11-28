@@ -61,48 +61,25 @@ describe("App", function() {
 
     return season;
   }
-
-  var TeamWeek = function(attributes) {
+  var PlayerState = function(attributes) {
     // TODO: this class needs to support record ids for the below objects when they're coming from the database
     this.week = attributes.week;
     this.team = attributes.team;
-    this._players = [];
+    this.player = attributes.player;
+    this.active = attributes.active;
   }
 
-  TeamWeek.prototype.addPlayers = function(players) {
-    var that = this;
-    players.forEach(function(player) {
-      that._players.push({ player: player, active: false });
+  function createPlayerState(attributes = {}) {
+    var playerState = new PlayerState(attributes);
+
+    db.createPlayerState({
+      teamId: playerState.team.id,
+      weekId: playerState.week.id,
+      playerId: playerState.player.id,
+      active: playerState.active
     });
-  }
 
-  TeamWeek.prototype.activatePlayers = function(players) {
-    var that = this;
-    players.forEach(function(player) {
-      var playerToActivate = _.find(
-        that._players,
-        function(teamPlayer) { return teamPlayer.player.id === player.id }
-      );
-
-      if (playerToActivate === undefined) {
-        throw new Error("No player found to activate");
-      } else {
-        playerToActivate.active = true;
-      }
-
-    });
-  }
-
-  function createTeamWeek(attributes = {}) {
-    var teamWeek = new TeamWeek(attributes);
-
-    var dbRecord = db.createTeamWeek({
-      weekId: teamWeek.week.id,
-      teamId: teamWeek.team.id
-    });
-    teamWeek.id = dbRecord.id;
-
-    return teamWeek;
+    return playerState;
   }
 
   var Week = function(attributes) {
@@ -300,13 +277,31 @@ describe("App", function() {
     week.addStat(teamBPlayerActive, category, 500);
     week.addStat(teamAPlayerInactive, category, 500);
     week.addStat(teamBPlayerInactive, category, 300);
-    var teamAWeek = createTeamWeek({week: week, team: teamA});
-    var teamBWeek = createTeamWeek({week: week, team: teamB});
-    teamAWeek.addPlayers([teamAPlayerActive, teamAPlayerInactive]);
-    teamBWeek.addPlayers([teamBPlayerActive, teamBPlayerInactive]);
 
-    teamAWeek.activatePlayers([teamAPlayerActive]);
-    teamBWeek.activatePlayers([teamBPlayerActive]);
+    createPlayerState({
+      week: week,
+      team: teamA,
+      player: teamAPlayerActive,
+      active: true
+    });
+    createPlayerState({
+      week: week,
+      team: teamA,
+      player: teamAPlayerInactive,
+      active: false
+    });
+    createPlayerState({
+      week: week,
+      team: teamB,
+      player: teamBPlayerActive,
+      active: true
+    });
+    createPlayerState({
+      week: week,
+      team: teamB,
+      player: teamBPlayerInactive,
+      active: false
+    });
 
     var scores = new App().getScoresForSeason1(week.seasonId);
 
