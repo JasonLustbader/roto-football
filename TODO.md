@@ -1,26 +1,10 @@
 ## Next time
 
-2017-11-27
+2017-12-04
 
-activeStats is returning the stats, but with no teamIds 
-(in getScoresForSeason1)
-
-2017-11-15
-
-* Retrieve active players from database for getScoresForSeason1
-
-< 2017-11-15
-Association should be PlayerTeam
--playerId
--teamId
--weekId
--active?
-
-we currently assign a player to a team directly, and persist only for stats, but:
-- a player can switch teams from week to week
-- a player can be active/inactive relative to its team and a given week
-- as a result of the above, we can't associate a player only with a team for the purposes of determining which players are on a team; we must also consider the week
-
+- Test for active players passes
+- Working on making other tests pass now
+- Working on "App scores multiple categories for two teams for a two-week season"
 
 
 ## Feature List

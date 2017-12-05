@@ -95,7 +95,6 @@ describe("App", function() {
       weekId: this.id,
       seasonId: this.seasonId,
       categoryId: category.id,
-      teamId: player.teamId,
       playerId: player.id,
       value: value
     });
@@ -242,8 +241,8 @@ describe("App", function() {
   it("scores multiple categories for two teams for a two-week season", function() {
     var teamA = createTeam();
     var teamB = createTeam();
-    var teamAPlayer = createPlayer(teamA);
-    var teamBPlayer = createPlayer(teamB);
+    var teamAPlayer = createPlayer();
+    var teamBPlayer = createPlayer();
     var category1 = createRushingYardsCategory();
     var category2 = createReceivingYardsCategory();
     var season = createSeason();
@@ -258,7 +257,32 @@ describe("App", function() {
     week2.addStat(teamAPlayer, category2, 500);
     week2.addStat(teamBPlayer, category2, 200);
 
-    var scores = new App().getScoresForSeason(season.id);
+    createPlayerState({
+      week: week1,
+      team: teamA,
+      player: teamAPlayer,
+      active: true
+    });
+    createPlayerState({
+      week: week1,
+      team: teamB,
+      player: teamBPlayer,
+      active: true
+    });
+    createPlayerState({
+      week: week2,
+      team: teamA,
+      player: teamAPlayer,
+      active: true
+    });
+    createPlayerState({
+      week: week2,
+      team: teamB,
+      player: teamBPlayer,
+      active: true
+    });
+
+    var scores = new App().getScoresForSeason1(season.id);
 
     expect(scores[teamA.id]).toEqual(4);
     expect(scores[teamB.id]).toEqual(2);
