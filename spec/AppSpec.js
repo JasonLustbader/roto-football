@@ -136,14 +136,27 @@ describe("App", function() {
   it("scores a category for two teams for a one-week season", function() {
     var teamA = createTeam();
     var teamB = createTeam();
-    var teamAPlayer = createPlayer(teamA);
-    var teamBPlayer = createPlayer(teamB);
+    var teamAPlayer = createPlayer();
+    var teamBPlayer = createPlayer();
     var category = createRushingYardsCategory();
     var week = createWeek();
     week.addStat(teamAPlayer, category, 300);
     week.addStat(teamBPlayer, category, 500);
 
-    var scores = new App().getCategoryScoresForSeason(week.seasonId, category.id);
+    createPlayerState({
+      week: week,
+      team: teamA,
+      player: teamAPlayer,
+      active: true
+    });
+    createPlayerState({
+      week: week,
+      team: teamB,
+      player: teamBPlayer,
+      active: true
+    });
+
+    var scores = new App().getScoresForSeason1(week.seasonId);
 
     expect(scores[teamA.id]).toEqual(1);
     expect(scores[teamB.id]).toEqual(2);
@@ -152,10 +165,10 @@ describe("App", function() {
   it("scores a category for two teams with two players each for a one-week season", function() {
     var teamA = createTeam();
     var teamB = createTeam();
-    var teamAPlayer1 = createPlayer(teamA);
-    var teamBPlayer1 = createPlayer(teamB);
-    var teamAPlayer2 = createPlayer(teamA);
-    var teamBPlayer2 = createPlayer(teamB);
+    var teamAPlayer1 = createPlayer();
+    var teamBPlayer1 = createPlayer();
+    var teamAPlayer2 = createPlayer();
+    var teamBPlayer2 = createPlayer();
     var category = createRushingYardsCategory();
     var season1 = createSeason();
     var week = createWeek({ seasonId: season1.id });
@@ -164,7 +177,32 @@ describe("App", function() {
     week.addStat(teamAPlayer2, category, 150);
     week.addStat(teamBPlayer2, category, 50);
 
-    var scores = new App().getCategoryScoresForSeason(week.seasonId, category.id);
+    createPlayerState({
+      week: week,
+      team: teamA,
+      player: teamAPlayer1,
+      active: true
+    });
+    createPlayerState({
+      week: week,
+      team: teamA,
+      player: teamAPlayer2,
+      active: true
+    });
+    createPlayerState({
+      week: week,
+      team: teamB,
+      player: teamBPlayer1,
+      active: true
+    });
+    createPlayerState({
+      week: week,
+      team: teamB,
+      player: teamBPlayer2,
+      active: true
+    });
+
+    var scores = new App().getScoresForSeason1(week.seasonId);
 
     expect(scores[teamA.id]).toEqual(2);
     expect(scores[teamB.id]).toEqual(1);
@@ -177,7 +215,32 @@ describe("App", function() {
     week.addStat(teamAPlayer2, category, 100);
     week.addStat(teamBPlayer2, category, 150);
 
-    var scores = new App().getCategoryScoresForSeason(week.seasonId, category.id);
+    createPlayerState({
+      week: week,
+      team: teamA,
+      player: teamAPlayer1,
+      active: true
+    });
+    createPlayerState({
+      week: week,
+      team: teamA,
+      player: teamAPlayer2,
+      active: true
+    });
+    createPlayerState({
+      week: week,
+      team: teamB,
+      player: teamBPlayer1,
+      active: true
+    });
+    createPlayerState({
+      week: week,
+      team: teamB,
+      player: teamBPlayer2,
+      active: true
+    });
+
+    var scores = new App().getScoresForSeason1(week.seasonId);
 
     expect(scores[teamA.id]).toEqual(2);
     expect(scores[teamB.id]).toEqual(1);
@@ -186,14 +249,27 @@ describe("App", function() {
   it("scores a category for two teams for a one-week season when the teams tie", function() {
     var teamA = createTeam();
     var teamB = createTeam();
-    var teamAPlayer = createPlayer(teamA);
-    var teamBPlayer = createPlayer(teamB);
+    var teamAPlayer = createPlayer();
+    var teamBPlayer = createPlayer();
     var category = createRushingYardsCategory();
     var week = createWeek();
     week.addStat(teamAPlayer, category, 300);
     week.addStat(teamBPlayer, category, 300);
 
-    var categoryScoreForWeek = new App().getScoresForSeason(week.seasonId);
+    createPlayerState({
+      week: week,
+      team: teamA,
+      player: teamAPlayer,
+      active: true
+    });
+    createPlayerState({
+      week: week,
+      team: teamB,
+      player: teamBPlayer,
+      active: true
+    });
+
+    var categoryScoreForWeek = new App().getScoresForSeason1(week.seasonId);
 
     expect(categoryScoreForWeek[teamA.id]).toEqual(1.5);
     expect(categoryScoreForWeek[teamB.id]).toEqual(1.5);
@@ -202,8 +278,8 @@ describe("App", function() {
   it("scores multiple categories for two teams for a one-week season", function() {
     var teamA = createTeam();
     var teamB = createTeam();
-    var teamAPlayer = createPlayer(teamA);
-    var teamBPlayer = createPlayer(teamB);
+    var teamAPlayer = createPlayer();
+    var teamBPlayer = createPlayer();
     var category1 = createRushingYardsCategory();
     var category2 = createReceivingYardsCategory();
     var week = createWeek();
@@ -212,7 +288,20 @@ describe("App", function() {
     week.addStat(teamAPlayer, category2, 300);
     week.addStat(teamBPlayer, category2, 500);
 
-    var scores = new App().getScoresForSeason(week.seasonId);
+    createPlayerState({
+      week: week,
+      team: teamA,
+      player: teamAPlayer,
+      active: true
+    });
+    createPlayerState({
+      week: week,
+      team: teamB,
+      player: teamBPlayer,
+      active: true
+    });
+
+    var scores = new App().getScoresForSeason1(week.seasonId);
 
     expect(scores[teamA.id]).toEqual(2);
     expect(scores[teamB.id]).toEqual(4);
@@ -221,8 +310,8 @@ describe("App", function() {
   it("scores a category for two teams for a two-week season", function() {
     var teamA = createTeam();
     var teamB = createTeam();
-    var teamAPlayer = createPlayer(teamA);
-    var teamBPlayer = createPlayer(teamB);
+    var teamAPlayer = createPlayer();
+    var teamBPlayer = createPlayer();
     var category = createRushingYardsCategory();
     var season = createSeason();
     var week1 = createWeek({ seasonId: season.id });
@@ -232,7 +321,32 @@ describe("App", function() {
     week2.addStat(teamAPlayer, category, 500);
     week2.addStat(teamBPlayer, category, 200);
 
-    var scores = new App().getScoresForSeason(season.id);
+    createPlayerState({
+      week: week1,
+      team: teamA,
+      player: teamAPlayer,
+      active: true
+    });
+    createPlayerState({
+      week: week1,
+      team: teamB,
+      player: teamBPlayer,
+      active: true
+    });
+    createPlayerState({
+      week: week2,
+      team: teamA,
+      player: teamAPlayer,
+      active: true
+    });
+    createPlayerState({
+      week: week2,
+      team: teamB,
+      player: teamBPlayer,
+      active: true
+    });
+
+    var scores = new App().getScoresForSeason1(season.id);
 
     expect(scores[teamA.id]).toEqual(2);
     expect(scores[teamB.id]).toEqual(1);
