@@ -1,10 +1,8 @@
 ## Next time
 
-2017-12-04
+2017-12-12
 
-- Test for active players passes
-- Working on making other tests pass now
-- Working on "App scores multiple categories for two teams for a two-week season"
+- Add support for teams without scores in a category (currently a pending test)
 
 
 ## Feature List
