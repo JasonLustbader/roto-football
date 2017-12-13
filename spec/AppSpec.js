@@ -333,6 +333,9 @@ describe("App", function() {
     expect(scores[teamB.id]).toEqual(2);
   });
 
+  // This could happen if a team hasn't played yet for a given week
+  it("defaults the sum of stats for a team in a given category to 0 if a team has not accrued any stats in that category");
+
   it("gives teams without a sufficient number of active players 0 points");
 });
 
