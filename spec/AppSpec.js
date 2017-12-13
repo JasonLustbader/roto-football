@@ -156,7 +156,7 @@ describe("App", function() {
       active: true
     });
 
-    var scores = new App().getScoresForSeason1(week.seasonId);
+    var scores = new App().getScoresForSeason(week.seasonId);
 
     expect(scores[teamA.id]).toEqual(1);
     expect(scores[teamB.id]).toEqual(2);
@@ -202,7 +202,7 @@ describe("App", function() {
       active: true
     });
 
-    var scores = new App().getScoresForSeason1(week.seasonId);
+    var scores = new App().getScoresForSeason(week.seasonId);
 
     expect(scores[teamA.id]).toEqual(2);
     expect(scores[teamB.id]).toEqual(1);
@@ -240,7 +240,7 @@ describe("App", function() {
       active: true
     });
 
-    var scores = new App().getScoresForSeason1(week.seasonId);
+    var scores = new App().getScoresForSeason(week.seasonId);
 
     expect(scores[teamA.id]).toEqual(2);
     expect(scores[teamB.id]).toEqual(1);
@@ -269,7 +269,7 @@ describe("App", function() {
       active: true
     });
 
-    var categoryScoreForWeek = new App().getScoresForSeason1(week.seasonId);
+    var categoryScoreForWeek = new App().getScoresForSeason(week.seasonId);
 
     expect(categoryScoreForWeek[teamA.id]).toEqual(1.5);
     expect(categoryScoreForWeek[teamB.id]).toEqual(1.5);
@@ -301,7 +301,7 @@ describe("App", function() {
       active: true
     });
 
-    var scores = new App().getScoresForSeason1(week.seasonId);
+    var scores = new App().getScoresForSeason(week.seasonId);
 
     expect(scores[teamA.id]).toEqual(2);
     expect(scores[teamB.id]).toEqual(4);
@@ -346,7 +346,7 @@ describe("App", function() {
       active: true
     });
 
-    var scores = new App().getScoresForSeason1(season.id);
+    var scores = new App().getScoresForSeason(season.id);
 
     expect(scores[teamA.id]).toEqual(2);
     expect(scores[teamB.id]).toEqual(1);
@@ -396,7 +396,7 @@ describe("App", function() {
       active: true
     });
 
-    var scores = new App().getScoresForSeason1(season.id);
+    var scores = new App().getScoresForSeason(season.id);
 
     expect(scores[teamA.id]).toEqual(4);
     expect(scores[teamB.id]).toEqual(2);
@@ -441,7 +441,7 @@ describe("App", function() {
       active: false
     });
 
-    var scores = new App().getScoresForSeason1(week.seasonId);
+    var scores = new App().getScoresForSeason(week.seasonId);
 
     expect(scores[teamA.id]).toEqual(1);
     expect(scores[teamB.id]).toEqual(2);
