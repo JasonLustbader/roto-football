@@ -5,28 +5,15 @@
 - Add support for teams without scores in a category (currently a pending test)
 
 
-## Feature List
+## Backlog
 
-### Teams can have more players than there are positions to fill
-
-Each team in a league has a fixed number of positions (running backs, quarter back, etc.) for a season, agreed upon by the league. A team's "active lineup" is defined as the players assigned to each position for that week. If there are more players on a team than positions, players that don't fit into a position for a week must be "inactive".
-
-An "inactive" player's scores (from the actual game) do not impact the team's score for the week.  The active and inactive players for a team can change from week to week.
-
-High-level:
-* Players are assigned positions for a season
-* The game (eventually, league) has a maximum number of active positions allowed
-* Players are assigned as active in positions per week
-
-#### Implementation notes
-
-Cleanup: Define categories in Db and figure out why tests for categories aren't failing
 Cleanup: Upgrade nodejs (we're using 6.x, 8.x is out)
-Feature: The stats of inactive players do not affect the team scores in the roto-football game
 Cleanup: DRY up id incrementing for factory functions
-Feature: The inactive players can change week-to-week
-Feature: A team with unfilled positions for a week will get a score of 0 for all categories for that week
-Feature: A week cannot be created with a team exceeding the maximum players for a position
+Feature: The game has a maximum number of active players per team per week
+Epic: Position support
+	Feature: Players can be assigned positions for a team and week
+	Feature: A team with unfilled positions for a week will get a score of 0 for all categories for that week
+	Feature: The game has a maximum number of active players for a position per week
 Feature: An active player can be deactivated for a week when managing active players before a week is played
 
 ### Handle categories where the value is better the lower it is
