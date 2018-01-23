@@ -7,6 +7,7 @@
 
 ## Backlog
 
+Cleanup: Make category persistence consistent with weeks and player states
 Cleanup: Upgrade nodejs (we're using 6.x, 8.x is out)
 Cleanup: DRY up id incrementing for factory functions
 Feature: The game has a maximum number of active players per team per week

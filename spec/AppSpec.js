@@ -6,10 +6,13 @@ describe("App", function() {
   var Team = function() {
   }
 
-  var nextTeamId = 1;
   function createTeam() {
     var team = new Team();
-    team.id = nextTeamId++;
+
+    let record = db.createTeam();
+
+    team.id = record.id;
+
     return team;
   }
 
@@ -448,7 +451,34 @@ describe("App", function() {
   });
 
   // This could happen if a team hasn't played yet for a given week
-  it("defaults the sum of stats for a team in a given category to 0 if a team has not accrued any stats in that category");
+  it("defaults the sum of stats for a team in a given category to 0 if a team has not accrued any stats in that category", function() {
+    var week = createWeek();
+    var category = createRushingYardsCategory();
+    var teamWithStats = createTeam();
+    var teamWithoutStats = createTeam();
+    var playerWithStats = createPlayer();
+    var playerWithoutStats = createPlayer();
+
+    createPlayerState({
+      week: week,
+      team: teamWithStats,
+      player: playerWithStats,
+      active: true
+    });
+    createPlayerState({
+      week: week,
+      team: teamWithoutStats,
+      player: playerWithoutStats,
+      active: true
+    });
+
+    week.addStat(playerWithStats, category, 100);
+
+    var scores = new App().getScoresForSeason(week.seasonId);
+
+    expect(scores[teamWithStats.id]).toEqual(2);
+    expect(scores[teamWithoutStats.id]).toEqual(1);
+  });
 
   it("gives teams without a sufficient number of active players 0 points");
 });
