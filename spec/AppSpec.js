@@ -107,24 +107,15 @@ describe("App", function() {
     this._activePlayers.push(player);
   }
 
-  var nextWeekId = 1;
   function createWeek(attributes = {}) {
-    attributes = Object.assign(
-      {
-        id: nextWeekId++
-      },
-      attributes
-    );
-
-    if (typeof(attributes.seasonId) === "undefined" || attributes.seasonId === null) {
+    if (attributes.seasonId == null) {
       attributes.seasonId = createSeason().id;
     }
 
-    var week = new Week(attributes);
+    let week = new Week(attributes);
 
-    db.createWeek(
+    week.id = db.createWeek(
       {
-        id: week.id,
         seasonId: week.seasonId
       }
     );
