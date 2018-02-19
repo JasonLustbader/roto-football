@@ -9,9 +9,7 @@ describe("App", function() {
   function createTeam() {
     var team = new Team();
 
-    let record = db.createTeam();
-
-    team.id = record.id;
+    team.id = db.createTeam();
 
     return team;
   }
