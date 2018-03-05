@@ -1,11 +1,10 @@
 ## On Deck
 
-Cleanup: Make category persistence consistent with weeks and player states
+Cleanup: refactor AppSpec a la Db.js
 
 ## Backlog
 
 Cleanup: Upgrade nodejs (we're using 6.x, 8.x is out)
-Cleanup: DRY up id incrementing for factory functions
 Feature: The game has a maximum number of active players per team per week
 Epic: Position support
 	Feature: Players can be assigned positions for a team and week

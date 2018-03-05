@@ -3,49 +3,22 @@ var App = require("../lib/App.js");
 var db = require("../lib/Db.js");
 
 describe("App", function() {
-  var Team = function() {
-  }
-
   function createTeam() {
-    var team = new Team();
-
-    team.id = db.createTeam();
-
-    return team;
+    return {
+      id: db.createTeam()
+    }
   }
 
-  var nextPlayerId = 1;
   function createPlayer() {
     return {
-      id: nextPlayerId++
+      id: db.createPlayer()
     };
   }
 
-  class Category {
-    constructor(name) {
-      this.name = name;
-    }
-
-    save() {
-      db.createCategory({
-        id: this.id,
-        name: this.name
-      });
-    }
-  }
-
-  function createRushingYardsCategory() {
-    var cat = new Category("rushing_yards");
-    cat.id = 1;
-    cat.save();
-    return cat;
-  }
-
-  function createReceivingYardsCategory() {
-    var cat = new Category("receiving_yards");
-    cat.id = 2;
-    cat.save();
-    return cat;
+  function createCategory() {
+    return {
+      id: db.createCategory()
+    };
   }
 
   var Season = function() { }
@@ -130,7 +103,7 @@ describe("App", function() {
     var teamB = createTeam();
     var teamAPlayer = createPlayer();
     var teamBPlayer = createPlayer();
-    var category = createRushingYardsCategory();
+    var category = createCategory();
     var week = createWeek();
     week.addStat(teamAPlayer, category, 300);
     week.addStat(teamBPlayer, category, 500);
@@ -161,7 +134,7 @@ describe("App", function() {
     var teamBPlayer1 = createPlayer();
     var teamAPlayer2 = createPlayer();
     var teamBPlayer2 = createPlayer();
-    var category = createRushingYardsCategory();
+    var category = createCategory();
     var season1 = createSeason();
     var week = createWeek({ seasonId: season1.id });
     week.addStat(teamAPlayer1, category, 100);
@@ -243,7 +216,7 @@ describe("App", function() {
     var teamB = createTeam();
     var teamAPlayer = createPlayer();
     var teamBPlayer = createPlayer();
-    var category = createRushingYardsCategory();
+    var category = createCategory();
     var week = createWeek();
     week.addStat(teamAPlayer, category, 300);
     week.addStat(teamBPlayer, category, 300);
@@ -272,8 +245,8 @@ describe("App", function() {
     var teamB = createTeam();
     var teamAPlayer = createPlayer();
     var teamBPlayer = createPlayer();
-    var category1 = createRushingYardsCategory();
-    var category2 = createReceivingYardsCategory();
+    var category1 = createCategory();
+    var category2 = createCategory();
     var week = createWeek();
     week.addStat(teamAPlayer, category1, 300);
     week.addStat(teamBPlayer, category1, 500);
@@ -304,7 +277,7 @@ describe("App", function() {
     var teamB = createTeam();
     var teamAPlayer = createPlayer();
     var teamBPlayer = createPlayer();
-    var category = createRushingYardsCategory();
+    var category = createCategory();
     var season = createSeason();
     var week1 = createWeek({ seasonId: season.id });
     week1.addStat(teamAPlayer, category, 300);
@@ -349,8 +322,8 @@ describe("App", function() {
     var teamB = createTeam();
     var teamAPlayer = createPlayer();
     var teamBPlayer = createPlayer();
-    var category1 = createRushingYardsCategory();
-    var category2 = createReceivingYardsCategory();
+    var category1 = createCategory();
+    var category2 = createCategory();
     var season = createSeason();
     var week1 = createWeek({ seasonId: season.id });
     week1.addStat(teamAPlayer, category1, 300);
@@ -401,7 +374,7 @@ describe("App", function() {
     var teamBPlayerActive = createPlayer();
     var teamAPlayerInactive = createPlayer();
     var teamBPlayerInactive = createPlayer();
-    var category = createRushingYardsCategory();
+    var category = createCategory();
     var week = createWeek();
     week.addStat(teamAPlayerActive, category, 300);
     week.addStat(teamBPlayerActive, category, 500);
@@ -442,7 +415,7 @@ describe("App", function() {
   // This could happen if a team hasn't played yet for a given week
   it("defaults the sum of stats for a team in a given category to 0 if a team has not accrued any stats in that category", function() {
     var week = createWeek();
-    var category = createRushingYardsCategory();
+    var category = createCategory();
     var teamWithStats = createTeam();
     var teamWithoutStats = createTeam();
     var playerWithStats = createPlayer();
