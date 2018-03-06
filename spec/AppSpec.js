@@ -55,10 +55,6 @@ describe("App", function() {
     });
   }
 
-  Week.prototype.activatePlayer = function(player) {
-    this._activePlayers.push(player);
-  }
-
   function createWeek(attributes = {}) {
     if (attributes.seasonId == null) {
       attributes.seasonId = createSeason().id;
