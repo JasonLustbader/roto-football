@@ -37,21 +37,23 @@ describe("App", function() {
     return createRecord("PlayerState", playerState);
   }
 
+  function createWeekStat(attributes = {}) {
+    let weekStat = {
+      weekId: attributes.week.id,
+      seasonId: attributes.week.seasonId,
+      categoryId: attributes.category.id,
+      playerId: attributes.player.id,
+      value: attributes.value
+    };
+
+    return createRecord("WeekStat", weekStat);
+  }
+
   var Week = function(attributes) {
     var instance = this;
 
     Object.keys(attributes).forEach(function(attribute) {
       instance[attribute] = attributes[attribute];
-    });
-  }
-
-  Week.prototype.addStat = function(player, category, value) {
-    db.createWeekStat({
-      weekId: this.id,
-      seasonId: this.seasonId,
-      categoryId: category.id,
-      playerId: player.id,
-      value: value
     });
   }
 
@@ -82,8 +84,8 @@ describe("App", function() {
     var teamBPlayer = createPlayer();
     var category = createCategory();
     var week = createWeek();
-    week.addStat(teamAPlayer, category, 300);
-    week.addStat(teamBPlayer, category, 500);
+    createWeekStat({ week: week, player: teamAPlayer, category: category, value: 300 });
+    createWeekStat({ week: week, player: teamBPlayer, category: category, value: 500 });
 
     createPlayerState({
       week: week,
@@ -114,10 +116,10 @@ describe("App", function() {
     var category = createCategory();
     var season1 = createSeason();
     var week = createWeek({ seasonId: season1.id });
-    week.addStat(teamAPlayer1, category, 100);
-    week.addStat(teamBPlayer1, category, 150);
-    week.addStat(teamAPlayer2, category, 150);
-    week.addStat(teamBPlayer2, category, 50);
+    createWeekStat({ week: week, player: teamAPlayer1, category: category, value: 100 });
+    createWeekStat({ week: week, player: teamBPlayer1, category: category, value: 150 });
+    createWeekStat({ week: week, player: teamAPlayer2, category: category, value: 150 });
+    createWeekStat({ week: week, player: teamBPlayer2, category: category, value: 50 });
 
     createPlayerState({
       week: week,
@@ -152,10 +154,10 @@ describe("App", function() {
     // verify that it's not just picking a single player by swapping scores
     var season2 = createSeason();
     week = createWeek({ seasonId: season2.id });
-    week.addStat(teamAPlayer1, category, 150);
-    week.addStat(teamBPlayer1, category, 50);
-    week.addStat(teamAPlayer2, category, 100);
-    week.addStat(teamBPlayer2, category, 150);
+    createWeekStat({ week: week, player: teamAPlayer1, category: category, value: 150 });
+    createWeekStat({ week: week, player: teamBPlayer1, category: category, value: 50 });
+    createWeekStat({ week: week, player: teamAPlayer2, category: category, value: 100 });
+    createWeekStat({ week: week, player: teamBPlayer2, category: category, value: 150 });
 
     createPlayerState({
       week: week,
@@ -195,8 +197,8 @@ describe("App", function() {
     var teamBPlayer = createPlayer();
     var category = createCategory();
     var week = createWeek();
-    week.addStat(teamAPlayer, category, 300);
-    week.addStat(teamBPlayer, category, 300);
+    createWeekStat({ week: week, player: teamAPlayer, category: category, value: 300 });
+    createWeekStat({ week: week, player: teamBPlayer, category: category, value: 300 });
 
     createPlayerState({
       week: week,
@@ -225,10 +227,10 @@ describe("App", function() {
     var category1 = createCategory();
     var category2 = createCategory();
     var week = createWeek();
-    week.addStat(teamAPlayer, category1, 300);
-    week.addStat(teamBPlayer, category1, 500);
-    week.addStat(teamAPlayer, category2, 300);
-    week.addStat(teamBPlayer, category2, 500);
+    createWeekStat({ week: week, player: teamAPlayer, category: category1, value: 300 });
+    createWeekStat({ week: week, player: teamBPlayer, category: category1, value: 500 });
+    createWeekStat({ week: week, player: teamAPlayer, category: category2, value: 300 });
+    createWeekStat({ week: week, player: teamBPlayer, category: category2, value: 500 });
 
     createPlayerState({
       week: week,
@@ -257,11 +259,11 @@ describe("App", function() {
     var category = createCategory();
     var season = createSeason();
     var week1 = createWeek({ seasonId: season.id });
-    week1.addStat(teamAPlayer, category, 300);
-    week1.addStat(teamBPlayer, category, 500);
+    createWeekStat({ week: week1, player: teamAPlayer, category: category, value: 300 });
+    createWeekStat({ week: week1, player: teamBPlayer, category: category, value: 500 });
     var week2 = createWeek({ seasonId: season.id });
-    week2.addStat(teamAPlayer, category, 500);
-    week2.addStat(teamBPlayer, category, 200);
+    createWeekStat({ week: week2, player: teamAPlayer, category: category, value: 500 });
+    createWeekStat({ week: week2, player: teamBPlayer, category: category, value: 200 });
 
     createPlayerState({
       week: week1,
@@ -303,15 +305,15 @@ describe("App", function() {
     var category2 = createCategory();
     var season = createSeason();
     var week1 = createWeek({ seasonId: season.id });
-    week1.addStat(teamAPlayer, category1, 300);
-    week1.addStat(teamBPlayer, category1, 500);
-    week1.addStat(teamAPlayer, category2, 300);
-    week1.addStat(teamBPlayer, category2, 500);
+    createWeekStat({ week: week1, player: teamAPlayer, category: category1, value: 300 });
+    createWeekStat({ week: week1, player: teamBPlayer, category: category1, value: 500 });
+    createWeekStat({ week: week1, player: teamAPlayer, category: category2, value: 300 });
+    createWeekStat({ week: week1, player: teamBPlayer, category: category2, value: 500 });
     var week2 = createWeek({ seasonId: season.id });
-    week2.addStat(teamAPlayer, category1, 500);
-    week2.addStat(teamBPlayer, category1, 200);
-    week2.addStat(teamAPlayer, category2, 500);
-    week2.addStat(teamBPlayer, category2, 200);
+    createWeekStat({ week: week2, player: teamAPlayer, category: category1, value: 500 });
+    createWeekStat({ week: week2, player: teamBPlayer, category: category1, value: 200 });
+    createWeekStat({ week: week2, player: teamAPlayer, category: category2, value: 500 });
+    createWeekStat({ week: week2, player: teamBPlayer, category: category2, value: 200 });
 
     createPlayerState({
       week: week1,
@@ -353,10 +355,10 @@ describe("App", function() {
     var teamBPlayerInactive = createPlayer();
     var category = createCategory();
     var week = createWeek();
-    week.addStat(teamAPlayerActive, category, 300);
-    week.addStat(teamBPlayerActive, category, 500);
-    week.addStat(teamAPlayerInactive, category, 500);
-    week.addStat(teamBPlayerInactive, category, 300);
+    createWeekStat({ week: week, player: teamAPlayerActive, category: category, value: 300 });
+    createWeekStat({ week: week, player: teamBPlayerActive, category: category, value: 500 });
+    createWeekStat({ week: week, player: teamAPlayerInactive, category: category, value: 500 });
+    createWeekStat({ week: week, player: teamBPlayerInactive, category: category, value: 300 });
 
     createPlayerState({
       week: week,
@@ -411,7 +413,7 @@ describe("App", function() {
       active: true
     });
 
-    week.addStat(playerWithStats, category, 100);
+    createWeekStat({ week: week, player: playerWithStats, category: category, value: 100 });
 
     var scores = new App().getScoresForSeason(week.seasonId);
 
