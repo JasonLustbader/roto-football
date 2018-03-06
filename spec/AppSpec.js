@@ -21,20 +21,12 @@ describe("App", function() {
     };
   }
 
-  var Season = function() { }
-
   function createSeason() {
-    var season = new Season();
-    season.id = 1;
-
-//    db.createSeason(
-//      {
-//        id: season.id
-//      }
-//    );
-
-    return season;
+    return {
+      id: db.createSeason()
+    };
   }
+
   var PlayerState = function(attributes) {
     // TODO: this class needs to support record ids for the below objects when they're coming from the database
     this.week = attributes.week;
