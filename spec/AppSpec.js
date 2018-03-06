@@ -3,49 +3,38 @@ var App = require("../lib/App.js");
 var db = require("../lib/Db.js");
 
 describe("App", function() {
+  function createRecord(recordType, attributes = {}) {
+    return Object.assign(
+      { id: db["create" + recordType](attributes) },
+      attributes
+    );
+  }
+
   function createTeam() {
-    return {
-      id: db.createTeam()
-    }
+    return createRecord("Team");
   }
 
   function createPlayer() {
-    return {
-      id: db.createPlayer()
-    };
+    return createRecord("Player");
   }
 
   function createCategory() {
-    return {
-      id: db.createCategory()
-    };
+    return createRecord("Category");
   }
 
   function createSeason() {
-    return {
-      id: db.createSeason()
-    };
-  }
-
-  var PlayerState = function(attributes) {
-    // TODO: this class needs to support record ids for the below objects when they're coming from the database
-    this.week = attributes.week;
-    this.team = attributes.team;
-    this.player = attributes.player;
-    this.active = attributes.active;
+    return createRecord("Season");
   }
 
   function createPlayerState(attributes = {}) {
-    var playerState = new PlayerState(attributes);
+    let playerState = {
+      teamId: attributes.team.id,
+      weekId: attributes.week.id,
+      playerId: attributes.player.id,
+      active: attributes.active
+    };
 
-    db.createPlayerState({
-      teamId: playerState.team.id,
-      weekId: playerState.week.id,
-      playerId: playerState.player.id,
-      active: playerState.active
-    });
-
-    return playerState;
+    return createRecord("PlayerState", playerState);
   }
 
   var Week = function(attributes) {
