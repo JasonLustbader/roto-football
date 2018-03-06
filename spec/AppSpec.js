@@ -49,28 +49,12 @@ describe("App", function() {
     return createRecord("WeekStat", weekStat);
   }
 
-  var Week = function(attributes) {
-    var instance = this;
-
-    Object.keys(attributes).forEach(function(attribute) {
-      instance[attribute] = attributes[attribute];
-    });
-  }
-
   function createWeek(attributes = {}) {
-    if (attributes.seasonId == null) {
-      attributes.seasonId = createSeason().id;
+    let week = {
+      seasonId: attributes.seasonId || createSeason().id
     }
 
-    let week = new Week(attributes);
-
-    week.id = db.createWeek(
-      {
-        seasonId: week.seasonId
-      }
-    );
-
-    return week;
+    return createRecord("Week", week);
   }
 
   beforeEach(function() {
