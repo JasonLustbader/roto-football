@@ -1,11 +1,10 @@
 ## On Deck
 
-Cleanup: refactor AppSpec a la Db.js
+Cleanup: Upgrade nodejs (we're using 6.x, 8.x is out)
+Feature: The game has a maximum number of active players per team per week
 
 ## Backlog
 
-Cleanup: Upgrade nodejs (we're using 6.x, 8.x is out)
-Feature: The game has a maximum number of active players per team per week
 Epic: Position support
 	Feature: Players can be assigned positions for a team and week
 	Feature: A team with unfilled positions for a week will get a score of 0 for all categories for that week

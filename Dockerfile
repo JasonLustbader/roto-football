@@ -7,9 +7,9 @@ RUN apt-get -y install \
 
 WORKDIR /usr/local
 
-RUN wget -q https://nodejs.org/dist/v6.11.0/node-v6.11.0-linux-x64.tar.xz && tar xf node-v6.11.0-linux-x64.tar.xz && rm node-v6.11.0-linux-x64.tar.xz
+RUN wget -q https://nodejs.org/dist/v9.8.0/node-v9.8.0-linux-x64.tar.xz && tar xf node-v9.8.0-linux-x64.tar.xz && rm node-v9.8.0-linux-x64.tar.xz
 
-ENV PATH=/usr/local/node-v6.11.0-linux-x64/bin:$PATH
+ENV PATH=/usr/local/node-v9.8.0-linux-x64/bin:$PATH
 
 RUN ln -s /usr/bin/nodejs /usr/bin/node
 
