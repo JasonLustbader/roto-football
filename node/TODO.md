@@ -1,6 +1,5 @@
 ## On Deck
 
-Cleanup: Upgrade nodejs (we're using 6.x, 8.x is out)
 Feature: The game has a maximum number of active players per team per week
 
 ## Backlog
