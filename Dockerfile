@@ -2,6 +2,7 @@ FROM debian:9.4
 
 RUN apt-get update && apt-get -y install \
   gcc \
+  libsqlite3-dev \
   libssl-dev \
   make \
   wget \
