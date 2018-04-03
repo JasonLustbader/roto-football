@@ -1,6 +1,11 @@
-version: '2.0'
+version: '3.6'
 services:
   app:
     build: .
+    cap_add:
+      - SYS_PTRACE
     volumes:
       - ".:/opt/app"
+    ports:
+      - "3000:3000"
+    command: bundle exec rails s
