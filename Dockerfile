@@ -1,5 +1,6 @@
 FROM debian:9.4
 
+# Base/ruby dependencies
 RUN apt-get update && apt-get -y install \
   gcc \
   libssl-dev \
@@ -19,7 +20,12 @@ ENV BUNDLE_APP_CONFIG=$BUNDLE_PATH
 RUN mkdir -p $BUNDLE_APP_CONFIG
 COPY Gemfile* /tmp/
 WORKDIR /tmp
-RUN bundle install --no-deployment
+
+# Rails/gem dependencies
+RUN apt-get -y install \
+  libsqlite3-dev
+
+RUN bundle install
 
 RUN mkdir -p /opt/app
 COPY . /opt/app
