@@ -31,4 +31,18 @@ RUN mkdir -p /opt/app
 COPY . /opt/app
 WORKDIR /opt/app
 RUN chown -R appuser:appuser .
+
+# Selenium dependencies
+
+RUN echo "deb http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list
+
+RUN apt-get -y install \
+  gnupg
+
+RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
+
+RUN apt-get update && apt-get -y install \
+  google-chrome-stable \
+  libnss3
+
 USER appuser
