@@ -3,7 +3,7 @@ services:
   app:
     build: .
     cap_add:
-      - SYS_PTRACE
+      - SYS_ADMIN
     volumes:
       - ".:/opt/app"
     ports:
