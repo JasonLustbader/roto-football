@@ -1,11 +1,18 @@
 require "rails_helper"
 
-RSpec.describe "visiting /league page", type: :system do
+describe "visiting /league page", type: :system do
   before do
     driven_by :selenium, using: :headless_chrome
   end
 
-  it "can go to the league page" do
-    visit '/league'
+  it "shows the team names" do
+    create(:team, name: "Team A")
+    create(:team, name: "Team B")
+
+    visit "/league"
+
+    team_list = find("#team_list")
+    expect(team_list).to have_text("Team A")
+    expect(team_list).to have_text("Team B")
   end
 end
