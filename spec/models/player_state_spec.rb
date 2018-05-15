@@ -1,16 +1,36 @@
 require 'rails_helper'
 
 RSpec.describe PlayerState, type: :model do
-  let(:player_state) { FactoryBot.create(:player_state, week_id: week_id) }
+  describe "validations" do
+    it "passes by default" do
+      player_state = FactoryBot.build(:player_state)
+      expect(player_state.valid?).to be true
+    end
 
-  describe "week id validation" do
-    context "with a valid week id" do
-      it "doesn't save" do
+    context "for team" do
+      context "not present" do
+        it "fails" do
+          player_state = FactoryBot.build(:player_state, team: nil)
+          expect(player_state.valid?).to be false
+        end
       end
     end
 
-    context "with an invalid week id" do
-      it "saves" do
+    context "for player" do
+      context "not present" do
+        it "fails" do
+          player_state = FactoryBot.build(:player_state, player: nil)
+          expect(player_state.valid?).to be false
+        end
+      end
+    end
+
+    context "for week" do
+      context "not present" do
+        it "fails" do
+          player_state = FactoryBot.build(:player_state, week: nil)
+          expect(player_state.valid?).to be false
+        end
       end
     end
   end

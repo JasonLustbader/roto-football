@@ -1,8 +1,5 @@
 # TODO
-
-- add default name (with cascading ints) in team spec
-- add specs for validation for player state
-
+- replicate specs from node, work our way up to score
 ## Story: A league page shows each team in the league
 
 ## Backlog

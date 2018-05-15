@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :player_state do
-    team nil
-    week_id "MyString"
-    player nil
+    team
+    week
+    player
     active false
   end
 end
