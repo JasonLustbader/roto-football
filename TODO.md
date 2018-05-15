@@ -1,5 +1,8 @@
 # TODO
 
+- add default name (with cascading ints) in team spec
+- add specs for validation for player state
+
 ## Story: A league page shows each team in the league
 
 ## Backlog

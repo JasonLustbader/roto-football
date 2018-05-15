@@ -10,11 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_15_223930) do
+ActiveRecord::Schema.define(version: 2018_05_15_230212) do
 
   create_table "categories", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "player_states", force: :cascade do |t|
+    t.integer "team_id"
+    t.integer "week_id"
+    t.integer "player_id"
+    t.boolean "active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["player_id"], name: "index_player_states_on_player_id"
+    t.index ["team_id"], name: "index_player_states_on_team_id"
+    t.index ["week_id"], name: "index_player_states_on_week_id"
   end
 
   create_table "players", force: :cascade do |t|
@@ -24,6 +36,11 @@ ActiveRecord::Schema.define(version: 2018_05_15_223930) do
 
   create_table "teams", force: :cascade do |t|
     t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "weeks", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
