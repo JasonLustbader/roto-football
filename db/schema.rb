@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_15_230212) do
+ActiveRecord::Schema.define(version: 2018_05_21_224859) do
 
   create_table "categories", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -38,6 +38,18 @@ ActiveRecord::Schema.define(version: 2018_05_15_230212) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "week_metrics", force: :cascade do |t|
+    t.integer "week_id"
+    t.integer "player_id"
+    t.integer "category_id"
+    t.integer "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_week_metrics_on_category_id"
+    t.index ["player_id"], name: "index_week_metrics_on_player_id"
+    t.index ["week_id"], name: "index_week_metrics_on_week_id"
   end
 
   create_table "weeks", force: :cascade do |t|
