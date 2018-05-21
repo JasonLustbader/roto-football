@@ -1,1 +1,6 @@
-
+%table
+  %tr
+    %th Team Name
+    - @categories.each do |category|
+      %th= category.name
+    
