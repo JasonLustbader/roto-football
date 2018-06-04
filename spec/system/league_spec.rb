@@ -28,8 +28,8 @@ describe "visiting /league page", type: :system do
 
           visit '/league'
 
-          team_a_ranking = find("team-#{team_a.id}").value
-          team_b_ranking = find("team-#{team_b.id}").value
+          team_a_ranking = find("#team-#{team_a.id}").value
+          team_b_ranking = find("#team-#{team_b.id}").value
 
           expect(team_a_ranking).to eq("1")
           expect(team_b_ranking).to eq("2")

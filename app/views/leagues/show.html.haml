@@ -3,4 +3,10 @@
     %th Team Name
     - @categories.each do |category|
       %th= category.name
+  - @teams.each do |team|
+    %tr
+      %td{id: "team-#{team.id}"}= team.name 
+      - @categories.each do |category|
+        %td{id: "team-#{team.id}-category-#{category.id}"}=team_category_rankings[[team.id, category.id]]
+
     
