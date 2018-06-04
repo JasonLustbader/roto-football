@@ -3,6 +3,6 @@ FactoryBot.define do
     team
     week
     player
-    active false
+    active true
   end
 end
