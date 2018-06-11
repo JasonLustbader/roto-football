@@ -3,14 +3,16 @@ class TeamCategoryRanking < ApplicationRecord
   belongs_to :category
 
   def self.calculate
-    teams = Team.all
-    categories = Category.all
+    week_metrics = WeekMetric.order(:value)
+    week = Week.first
 
-    value = 0
-    teams.sort_by { |t| t.id }.each do |team|
-      categories.each do |category|
-        TeamCategoryRanking.create!(team: team, category: category, value: value += 1)
-      end
+    ranking = 1
+
+    week_metrics.each do |week_metric|
+      team = PlayerState.where(player: week_metric.player, week: week).first.team
+
+      TeamCategoryRanking.create!(team: team, category: week_metric.category, value: ranking)
+      ranking += 1
     end
   end
 end

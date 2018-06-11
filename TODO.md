@@ -1,6 +1,7 @@
 # TODO
-- replicate specs from node, work our way up to score
 ## Story: A league page shows each team in the league
+- replicate specs from node, work our way up to score
+- batch week metrics
 
 ## Backlog
 
