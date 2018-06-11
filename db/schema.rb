@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(version: 2018_06_04_223144) do
   create_table "team_category_rankings", force: :cascade do |t|
     t.integer "team_id"
     t.integer "category_id"
-    t.integer "value"
+    t.float "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_team_category_rankings_on_category_id"

@@ -4,15 +4,40 @@ class TeamCategoryRanking < ApplicationRecord
 
   def self.calculate
     week_metrics = WeekMetric.order(:value)
-    week = Week.first
+    category = week_metrics.first.category if week_metrics.present?
 
-    ranking = 1
+    tied_score = nil
+    tied_team_buffer = []
+    ranking = 0
 
     week_metrics.each do |week_metric|
-      team = PlayerState.where(player: week_metric.player, week: week).first.team
+      if tied_team_buffer.empty?
+        tied_team_buffer << week_metric.team
+        tied_score = week_metric.value
+      elsif tied_score == week_metric.value
+        tied_team_buffer << week_metric.team
+      else
+        score = self.calculate_value_for_rank(ranking, tied_team_buffer.size)
+        tied_team_buffer.each do |team|
+          TeamCategoryRanking.create!(team: team, category: category, value: score)
+        end
+        tied_team_buffer = [week_metric.team]
+      end
 
-      TeamCategoryRanking.create!(team: team, category: week_metric.category, value: ranking)
       ranking += 1
     end
+
+    unless tied_team_buffer.empty?
+      score = self.calculate_value_for_rank(ranking, tied_team_buffer.size)
+      tied_team_buffer.each do |team|
+        TeamCategoryRanking.create!(team: team, category: category, value: score)
+      end
+    end
+  end
+
+  def self.calculate_value_for_rank(rank, tied_team_count)
+    return rank if tied_team_count == 1
+
+    1 + (rank - tied_team_count) + 1.0 * (tied_team_count - 1) / tied_team_count;
   end
 end

@@ -39,6 +39,17 @@ RSpec.describe TeamCategoryRanking, type: :model do
         expect(TeamCategoryRanking.find_by(team: team_a, category: category).value).to eq(2)
         expect(TeamCategoryRanking.find_by(team: team_b, category: category).value).to eq(1)
       end
+
+      it "gives equal points for teams tied in the rankings" do
+        team_a_stat = rand(100)
+        team_b_stat = team_a_stat
+        create(:week_metric, week: week, player: player_a, category: category, value: team_a_stat)
+        create(:week_metric, week: week, player: player_b, category: category, value: team_b_stat)
+
+        TeamCategoryRanking.calculate
+        expect(TeamCategoryRanking.find_by(team: team_a, category: category).value).to eq(1.5)
+        expect(TeamCategoryRanking.find_by(team: team_b, category: category).value).to eq(1.5)
+      end
     end
   end
 end
