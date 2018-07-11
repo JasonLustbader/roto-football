@@ -31,8 +31,8 @@ describe "visiting /league page", type: :system do
           team_a_ranking = find("#team-#{team_a.id}-category-#{category.id}").text
           team_b_ranking = find("#team-#{team_b.id}-category-#{category.id}").text
 
-          expect(team_a_ranking).to eq("1")
-          expect(team_b_ranking).to eq("2")
+          expect(team_a_ranking).to eq("1.0")
+          expect(team_b_ranking).to eq("2.0")
         end
       end
     end

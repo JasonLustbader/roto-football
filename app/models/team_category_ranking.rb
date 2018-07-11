@@ -3,25 +3,29 @@ class TeamCategoryRanking < ApplicationRecord
   belongs_to :category
 
   def self.calculate
-    week_metrics = WeekMetric.order(:value)
-    category = week_metrics.first.category if week_metrics.present?
+    week_metrics = WeekMetric.joins("INNER JOIN player_states ON player_states.player_id = week_metrics.player_id").group(:team_id, :category_id).sum(:value)
+    sorted_team_aggregates = week_metrics.to_a.sort_by{ |team_id, value| value }
+    category_id = sorted_team_aggregates.first.first.last if week_metrics.present?
 
     tied_score = nil
     tied_team_buffer = []
     ranking = 0
 
-    week_metrics.each do |week_metric|
+    sorted_team_aggregates.each do |team_aggregate|
+      team_id = team_aggregate.first.first
+      value = team_aggregate.last
+
       if tied_team_buffer.empty?
-        tied_team_buffer << week_metric.team
-        tied_score = week_metric.value
-      elsif tied_score == week_metric.value
-        tied_team_buffer << week_metric.team
+        tied_team_buffer << team_id
+        tied_score = value
+      elsif tied_score == value
+        tied_team_buffer << team_id
       else
         score = self.calculate_value_for_rank(ranking, tied_team_buffer.size)
         tied_team_buffer.each do |team|
-          TeamCategoryRanking.create!(team: team, category: category, value: score)
+          TeamCategoryRanking.create!(team_id: team, category_id: category_id, value: score)
         end
-        tied_team_buffer = [week_metric.team]
+        tied_team_buffer = [team_id]
       end
 
       ranking += 1
@@ -30,7 +34,7 @@ class TeamCategoryRanking < ApplicationRecord
     unless tied_team_buffer.empty?
       score = self.calculate_value_for_rank(ranking, tied_team_buffer.size)
       tied_team_buffer.each do |team|
-        TeamCategoryRanking.create!(team: team, category: category, value: score)
+        TeamCategoryRanking.create!(team_id: team, category_id: category_id, value: score)
       end
     end
   end

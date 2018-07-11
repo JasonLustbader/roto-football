@@ -50,6 +50,31 @@ RSpec.describe TeamCategoryRanking, type: :model do
         expect(TeamCategoryRanking.find_by(team: team_a, category: category).value).to eq(1.5)
         expect(TeamCategoryRanking.find_by(team: team_b, category: category).value).to eq(1.5)
       end
+
+      context "with multiple players on a team" do
+        let(:player_aa) { create(:player) }
+        let(:player_bb) { create(:player) }
+
+        before do
+          create(:player_state, team: team_a, week: week, player: player_aa)
+          create(:player_state, team: team_b, week: week, player: player_bb)
+        end
+
+        it "gives one point for each spot higher in the rankings" do
+          player_a_stat = rand(100)
+          player_aa_stat = rand(100)
+          player_b_stat = rand(100)
+          player_bb_stat = player_a_stat + player_aa_stat - player_b_stat - rand(1..100)
+          create(:week_metric, week: week, player: player_a, category: category, value: player_a_stat)
+          create(:week_metric, week: week, player: player_b, category: category, value: player_b_stat)
+          create(:week_metric, week: week, player: player_aa, category: category, value: player_aa_stat)
+          create(:week_metric, week: week, player: player_bb, category: category, value: player_bb_stat)
+
+          TeamCategoryRanking.calculate
+          expect(TeamCategoryRanking.find_by(team: team_a, category: category).value).to eq(2)
+          expect(TeamCategoryRanking.find_by(team: team_b, category: category).value).to eq(1)
+        end
+      end
     end
   end
 end
