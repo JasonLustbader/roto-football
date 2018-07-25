@@ -68,6 +68,20 @@ RSpec.describe TeamCategoryRanking, type: :model do
         expect(TeamCategoryRanking.find_by(team: team_b, category: category2).value).to eq(2)
       end
 
+      it "ignores players who were not active" do
+        player_c = create(:player)
+        create(:player_state, team: team_b, week: week, player: player_c, active: false)
+        team_a_stat = rand(100)
+        team_b_stat = team_a_stat - rand(1..100)
+        create(:week_metric, week: week, player: player_a, category: category, value: team_a_stat)
+        create(:week_metric, week: week, player: player_b, category: category, value: team_b_stat)
+        create(:week_metric, week: week, player: player_c, category: category, value: team_a_stat)
+
+        TeamCategoryRanking.calculate
+        expect(TeamCategoryRanking.find_by(team: team_a, category: category).value).to eq(2)
+        expect(TeamCategoryRanking.find_by(team: team_b, category: category).value).to eq(1)
+      end
+
       context "with multiple players on a team" do
         let(:player_aa) { create(:player) }
         let(:player_bb) { create(:player) }

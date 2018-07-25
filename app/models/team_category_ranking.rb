@@ -3,7 +3,7 @@ class TeamCategoryRanking < ApplicationRecord
   belongs_to :category
 
   def self.calculate
-    week_metrics = WeekMetric.joins("INNER JOIN player_states ON player_states.player_id = week_metrics.player_id").group(:team_id, :category_id).sum(:value)
+    week_metrics = WeekMetric.joins("INNER JOIN player_states ON (player_states.player_id = week_metrics.player_id)").where("player_states.active = ?", true).group(:team_id, :category_id).sum(:value)
     sorted_team_aggregates = week_metrics.to_a.sort_by{ |_, value| value }
 
     tied_scores = Hash.new()
