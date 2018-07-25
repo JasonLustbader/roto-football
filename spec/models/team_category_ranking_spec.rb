@@ -29,8 +29,8 @@ RSpec.describe TeamCategoryRanking, type: :model do
     end
 
     it "gives one point for each spot higher in the rankings" do
-      team_a_stat = rand(100)
-      team_b_stat = team_a_stat - rand(1..100)
+      team_a_stat = 100
+      team_b_stat = 50
       create(:week_metric, week: week, player: player_a, category: category, value: team_a_stat)
       create(:week_metric, week: week, player: player_b, category: category, value: team_b_stat)
 
@@ -40,8 +40,8 @@ RSpec.describe TeamCategoryRanking, type: :model do
     end
 
     it "gives equal points for teams tied in the rankings" do
-      team_a_stat = rand(100)
-      team_b_stat = team_a_stat
+      team_a_stat = 100
+      team_b_stat = 100
       create(:week_metric, week: week, player: player_a, category: category, value: team_a_stat)
       create(:week_metric, week: week, player: player_b, category: category, value: team_b_stat)
 
@@ -53,8 +53,8 @@ RSpec.describe TeamCategoryRanking, type: :model do
     it "gives one point for each spot higher in the rankings across multiple categories" do
       category2 = create(:category)
 
-      higher_stat_value = rand(100)
-      lower_stat_value = higher_stat_value - rand(1..100)
+      higher_stat_value = 100
+      lower_stat_value = 50
       create(:week_metric, week: week, player: player_a, category: category, value: higher_stat_value)
       create(:week_metric, week: week, player: player_b, category: category, value: lower_stat_value)
       create(:week_metric, week: week, player: player_a, category: category2, value: lower_stat_value)
@@ -77,10 +77,10 @@ RSpec.describe TeamCategoryRanking, type: :model do
       end
 
       it "gives one point for each spot higher in the rankings" do
-        player_a_stat = rand(100)
-        player_aa_stat = rand(100)
-        player_b_stat = rand(100)
-        player_bb_stat = player_a_stat + player_aa_stat - player_b_stat - rand(1..100)
+        player_a_stat = 100
+        player_aa_stat = 100
+        player_b_stat = 100
+        player_bb_stat = 50
         create(:week_metric, week: week, player: player_a, category: category, value: player_a_stat)
         create(:week_metric, week: week, player: player_b, category: category, value: player_b_stat)
         create(:week_metric, week: week, player: player_aa, category: category, value: player_aa_stat)
@@ -92,10 +92,10 @@ RSpec.describe TeamCategoryRanking, type: :model do
       end
 
       it "ignores players who were not active" do
-        player_a_stat = rand(100)
-        player_aa_stat = rand(100)
-        player_b_stat = rand(100)
-        player_bb_stat = player_a_stat + player_aa_stat - player_b_stat - rand(1..100)
+        player_a_stat = 100
+        player_aa_stat = 100
+        player_b_stat = 100
+        player_bb_stat = 50
         create(:week_metric, week: week, player: player_a, category: category, value: player_a_stat)
         create(:week_metric, week: week, player: player_b, category: category, value: player_b_stat)
         create(:week_metric, week: week, player: player_aa, category: category, value: player_aa_stat)
@@ -113,8 +113,8 @@ RSpec.describe TeamCategoryRanking, type: :model do
       let(:category2) { create(:category) }
 
       it "gives one point for each spot higher in the rankings across multiple categories" do
-        higher_stat_value = rand(100)
-        lower_stat_value = higher_stat_value - rand(1..100)
+        higher_stat_value = 100
+        lower_stat_value = 50
         create(:week_metric, week: week, player: player_a, category: category, value: higher_stat_value)
         create(:week_metric, week: week, player: player_b, category: category, value: lower_stat_value)
         create(:week_metric, week: week, player: player_a, category: category2, value: lower_stat_value)
